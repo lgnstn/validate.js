@@ -20,7 +20,7 @@
   //
   // Please note that the options are also passed to each validator.
   var validate = function(attributes, constraints, options) {
-    options = v.extend({}, v.options, options);
+    options = v.extends({}, v.options, options);
 
     var results = v.runValidations(attributes, constraints, options)
       , attr
@@ -38,7 +38,7 @@
   // Very much similar to underscore's extend.
   // The first argument is the target object and the remaining arguments will be
   // used as sources.
-  v.extend = function(obj) {
+  v.extends = function(obj) {
     [].slice.call(arguments, 1).forEach(function(source) {
       for (var attr in source) {
         obj[attr] = source[attr];
@@ -47,7 +47,7 @@
     return obj;
   };
 
-  v.extend(validate, {
+  v.extends(validate, {
     // This is the version of the library as a semver.
     // The toString function will allow it to be coerced into a string
     version: {
@@ -162,7 +162,7 @@
     // validation promises have been completed.
     // It can be called even if no validations returned a promise.
     async: function(attributes, constraints, options) {
-      options = v.extend({}, v.async.options, options);
+      options = v.extends({}, v.async.options, options);
 
       var WrapErrors = options.wrapErrors || function(errors) {
         return errors;
@@ -190,7 +190,7 @@
     },
 
     single: function(value, constraints, options) {
-      options = v.extend({}, v.single.options, options, {
+      options = v.extends({}, v.single.options, options, {
         format: "flat",
         fullMessages: false
       });
@@ -353,7 +353,7 @@
     // If you want to write %{...} without having it replaced simply
     // prefix it with % like this `Foo: %%{foo}` and it will be returned
     // as `"Foo: %{foo}"`
-    format: v.extend(function(str, vals) {
+    format: v.extends(function(str, vals) {
       if (!v.isString(str)) {
         return str;
       }
@@ -617,7 +617,7 @@
         // Removes errors without a message
         if (v.isArray(error.error)) {
           error.error.forEach(function(msg) {
-            ret.push(v.extend({}, error, {error: msg}));
+            ret.push(v.extends({}, error, {error: msg}));
           });
         } else {
           ret.push(error);
@@ -655,7 +655,7 @@
         error = v.format(error, {
           value: v.stringifyValue(errorInfo.value, options)
         });
-        ret.push(v.extend({}, errorInfo, {error: error}));
+        ret.push(v.extends({}, errorInfo, {error: error}));
       });
       return ret;
     },
@@ -715,7 +715,7 @@
           return attributes;
         }
 
-        var ret = v.extend({}, attributes)
+        var ret = v.extends({}, attributes)
           , w
           , attribute;
 
@@ -769,7 +769,7 @@
   validate.validators = {
     // Presence validates that the value isn't empty
     presence: function(value, options) {
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
       if (options.allowEmpty !== false ? !v.isDefined(value) : v.isEmpty(value)) {
         return options.message || this.message || "can't be blank";
       }
@@ -780,7 +780,7 @@
         return;
       }
 
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
 
       var is = options.is
         , maximum = options.maximum
@@ -827,7 +827,7 @@
         return;
       }
 
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
 
       var errors = []
         , name
@@ -921,7 +921,7 @@
         return options.message || errors;
       }
     },
-    datetime: v.extend(function(value, options) {
+    datetime: v.extends(function(value, options) {
       if (!v.isFunction(this.parse) || !v.isFunction(this.format)) {
         throw new Error("Both the parse and format functions needs to be set to use the datetime/date validator");
       }
@@ -931,7 +931,7 @@
         return;
       }
 
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
 
       var err
         , errors = []
@@ -982,7 +982,7 @@
       format: null
     }),
     date: function(value, options) {
-      options = v.extend({}, options, {dateOnly: true});
+      options = v.extends({}, options, {dateOnly: true});
       return v.validators.datetime.call(v.validators.datetime, value, options);
     },
     format: function(value, options) {
@@ -990,7 +990,7 @@
         options = {pattern: options};
       }
 
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
 
       var message = options.message || this.message || "is invalid"
         , pattern = options.pattern
@@ -1020,7 +1020,7 @@
       if (v.isArray(options)) {
         options = {within: options};
       }
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
       if (v.contains(options.within, value)) {
         return;
       }
@@ -1037,7 +1037,7 @@
       if (v.isArray(options)) {
         options = {within: options};
       }
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
       if (!v.contains(options.within, value)) {
         return;
       }
@@ -1047,8 +1047,8 @@
       }
       return v.format(message, {value: value});
     },
-    email: v.extend(function(value, options) {
-      options = v.extend({}, this.options, options);
+    email: v.extends(function(value, options) {
+      options = v.extends({}, this.options, options);
       var message = options.message || this.message || "is not a valid email";
       // Empty values are fine
       if (!v.isDefined(value)) {
@@ -1071,7 +1071,7 @@
       if (v.isString(options)) {
         options = {attribute: options};
       }
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
       var message = options.message ||
         this.message ||
         "is not equal to %{attribute}";
@@ -1099,7 +1099,7 @@
         return;
       }
 
-      options = v.extend({}, this.options, options);
+      options = v.extends({}, this.options, options);
 
       var message = options.message || this.message || "is not a valid url"
         , schemes = options.schemes || this.schemes || ['http', 'https']
@@ -1166,7 +1166,7 @@
         return message;
       }
     },
-    type: v.extend(function(value, originalOptions, attribute, attributes, globalOptions) {
+    type: v.extends(function(value, originalOptions, attribute, attributes, globalOptions) {
       if (v.isString(originalOptions)) {
         originalOptions = {type: originalOptions};
       }
@@ -1175,7 +1175,7 @@
         return;
       }
 
-      var options = v.extend({}, this.options, originalOptions);
+      var options = v.extends({}, this.options, originalOptions);
 
       var type = options.type;
       if (!v.isDefined(type)) {
