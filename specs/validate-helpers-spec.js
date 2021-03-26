@@ -1,18 +1,18 @@
 describe("validate", function() {
-  describe('extend', function() {
+  describe('extends', function() {
     it("extends the first argument with the remaining arguments", function() {
       var obj = {};
-      validate.extend(obj, {foo: "foo"}, {bar: "bar"});
+      validate.extends(obj, {foo: "foo"}, {bar: "bar"});
       expect(obj).toEqual({foo: "foo", bar: "bar"});
     });
 
     it("returns the first argument", function() {
       var obj = {};
-      expect(validate.extend(obj)).toBe(obj);
+      expect(validate.extends(obj)).toBe(obj);
     });
 
     it("extends with the seconds argument first", function() {
-      var actual = validate.extend({}, {foo: "foo"}, {foo: "bar"});
+      var actual = validate.extends({}, {foo: "foo"}, {foo: "bar"});
       expect(actual).toEqual({foo: "bar"});
     });
   });
@@ -216,8 +216,8 @@ describe("validate", function() {
       object.name = "Foo Bar";
       object.cycle = object;
 
-      expect(function () { 
-        return validate.prettify(object); 
+      expect(function () {
+        return validate.prettify(object);
       }).toThrow();
     });
 
